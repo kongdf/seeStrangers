@@ -1,6 +1,6 @@
 # seeStrangers
 
-一个基于 WebRTC 的视频通话应用，支持与陌生人进行 P2P 视频聊天，包含随机匹配、房间通话和屏幕共享功能。
+基于 WebRTC 的视频聊天项目，支持随机匹配、房间通话和屏幕共享。后端已从 Node.js 迁移为 Rust（Axum WebSocket）。
 
 ## 在线体验
 
@@ -8,51 +8,94 @@ https://mojian.kongdf.com/
 
 ## 技术栈
 
-- **前端**: Vue 3, Element Plus, Vite
-- **后端**: Hono, WebSocket (ws), @hono/node-server
+- 前端：Vue 3 + Vite + Element Plus
+- 后端：Rust + Axum（WebSocket 信令）
 
-## 快速开始
+## 本地开发
 
-### 环境要求
-
-- Node.js (推荐 v18+)
-
-### 安装
+### 启动后端（3101）
 
 ```bash
-# 安装后端依赖
 cd backend
-npm install
-
-# 安装前端依赖
-cd ../frontend
-npm install
+cargo run
 ```
 
-### 运行
+### 启动前端（3000）
 
 ```bash
-# 启动后端服务 (端口 8083)
-cd backend
-npm start
-
-# 新开终端，启动前端开发服务器
 cd frontend
+npm install
 npm run dev
 ```
 
-## 功能特性
+## 打包
 
-- 随机匹配用户进行视频通话
-- 房间模式视频通话
-- 屏幕共享
-- WebRTC P2P 直连
-- WebSocket 实时信令
-- TURN 服务器支持 (备用)
+### 前端
 
-## TURN 服务器配置
+```bash
+cd frontend
+npm install
+npm run build
+```
 
-WebRTC 默认优先使用 P2P 直连，当无法直连时会自动回退到 TURN 中继服务器。
+产物：`frontend/dist`
 
-> 项目中的 TURN 服务器配置我没隐藏,每个月只有500M的流量,请在使用时注意流量消耗。
+### 后端（macOS 本地编译 Linux，可部署 CentOS）
+
+```bash
+brew install zig
+cargo install cargo-zigbuild
+rustup target add x86_64-unknown-linux-musl
+cd backend
+cargo zigbuild --release --target x86_64-unknown-linux-musl
+```
+
+产物：`backend/target/x86_64-unknown-linux-musl/release/webrtc-backend`
+
+## 部署到 CentOS
+
+### 1) 上传产物
+
+```bash
+scp backend/target/x86_64-unknown-linux-musl/release/webrtc-backend root@<SERVER_IP>:/opt/server/seeStrangers/webrtc-backend
+scp -r frontend/dist root@<SERVER_IP>:/opt/server/seeStrangers/frontend/
+```
+
+### 2) 配置 systemd
+
+创建 `/etc/systemd/system/seestrangers.service`：
+
+```ini
+[Unit]
+Description=seeStrangers Rust Backend
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/server/seeStrangers
+ExecStart=/opt/server/seeStrangers/webrtc-backend
+Restart=always
+RestartSec=3
+User=root
+
+[Install]
+WantedBy=multi-user.target
+```
+
+启动：
+
+```bash
+chmod +x /opt/server/seeStrangers/webrtc-backend
+systemctl daemon-reload
+systemctl enable --now seestrangers.service
+systemctl restart seestrangers.service
+systemctl status seestrangers.service
+```
  
+记得配nginx反代
+
+## 常见问题
+
+- `Exec format error`：上传了错误平台二进制（例如 Mach-O），Linux 需要 ELF。
+- `status=203/EXEC`：`ExecStart` 路径不对，或文件不可执行。
+- WebSocket 失败：检查前端 `WS_URL`、Nginx Upgrade 头、后端 `3101` 是否在运行。

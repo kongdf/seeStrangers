@@ -1,0 +1,10 @@
+[package]
+name = "webrtc-backend"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+axum = { version = "0.8", features = ["ws"] }
+futures-util = "0.3"
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
