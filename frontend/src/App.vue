@@ -1068,6 +1068,152 @@ onUnmounted(() => {
   opacity: 0.35;
   cursor: not-allowed;
 }
+
+@media (max-width: 768px) {
+  .container {
+    height: 100dvh;
+  }
+
+  .el-header {
+    height: auto;
+    padding: 0;
+  }
+
+  .header-content {
+    padding: 10px 14px;
+    gap: 10px;
+  }
+
+  .logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+  }
+
+  .title-area h1 {
+    font-size: 14px;
+  }
+
+  .title-area p {
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 72vw;
+  }
+
+  .main-content {
+    padding: 8px 10px 6px;
+  }
+
+  .video-grid {
+    position: relative;
+    display: block;
+    height: 100%;
+    min-height: 52vh;
+  }
+
+  .videoBox {
+    border-radius: 10px;
+  }
+
+  .videoBox.remote,
+  .has-screen .videoBox.screen-share {
+    position: relative;
+    min-height: 100%;
+    height: 100%;
+    width: 100%;
+  }
+
+  .has-screen .videoBox.remote,
+  .videoBox.local,
+  .has-screen .videoBox.local {
+    position: absolute;
+    top: auto;
+    left: auto;
+    right: 10px;
+    bottom: 10px;
+    width: 34vw;
+    max-width: 144px;
+    min-height: 19vh;
+    height: 19vh;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+    z-index: 4;
+  }
+
+  .has-screen .videoBox.remote {
+    top: 10px;
+    left: 10px;
+    right: auto;
+    bottom: auto;
+    width: 30vw;
+    max-width: 128px;
+    min-height: 16vh;
+    height: 16vh;
+    z-index: 4;
+  }
+
+  .box-info,
+  .box-badge {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  .el-footer {
+    padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
+    background: transparent;
+  }
+
+  .controls {
+    padding: 8px 10px;
+    border-radius: 16px;
+    background: rgba(13, 13, 20, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.36);
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  .control-btn {
+    width: 52px;
+    height: 52px;
+  }
+
+  .mode-section {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mode-btn {
+    padding: 12px;
+  }
+
+  .mode-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+  }
+
+  .mode-title {
+    font-size: 13px;
+  }
+
+  .mode-desc {
+    font-size: 11px;
+  }
+
+  .action-section {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .action-btn {
+    height: 46px;
+  }
+}
 </style>
 
 <style>
@@ -1138,5 +1284,41 @@ onUnmounted(() => {
 
 .el-select__caret {
   color: rgba(255, 255, 255, 0.4) !important;
+}
+
+@media (max-width: 768px) {
+  .main-dialog {
+    width: calc(100vw - 20px) !important;
+    max-width: 560px;
+  }
+
+  .main-dialog .el-dialog {
+    width: 100% !important;
+    margin-top: 8vh !important;
+    border-radius: 16px !important;
+  }
+
+  .main-dialog .el-dialog__header {
+    padding: 20px 16px 0 16px !important;
+  }
+
+  .main-dialog .el-dialog__body {
+    padding: 14px 16px 18px !important;
+  }
+
+  .main-dialog .header-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    margin-bottom: 12px;
+  }
+
+  .main-dialog .dialog-header {
+    margin-bottom: 16px;
+  }
+
+  .main-dialog .dialog-header h2 {
+    font-size: 18px;
+  }
 }
 </style>
